@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IMF Whitepaper v1.2.1 — Remnant Fieldworks Inc.</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}]});"></script>
+<style>
+@page { size: A4; margin: 2.5cm 2cm;
+  @top-center { content: string(doctitle); font-family: Georgia, serif; font-size: 8.5pt; color: #555; }
+  @bottom-center { content: counter(page); font-family: Georgia, serif; font-size: 9pt; color: #555; } }
+@page :first { margin: 0; @top-center { content: none; } @bottom-center { content: none; } }
+body { margin: 0; padding: 0; font-family: Georgia, 'Times New Roman', serif;
+  font-size: 11pt; color: #222; line-height: 1.65;
+  text-align: justify; text-align-last: left;
+  string-set: doctitle ""; }
+h1 { string-set: doctitle content(); font-size: 18pt; color: #1a2744; margin: 22px 0 10px 0;
+  page-break-after: avoid; font-weight: 700; }
+h2 { font-size: 13.5pt; color: #1a2744; margin: 18px 0 8px 0; page-break-after: avoid; font-weight: 700; }
+h3 { font-size: 11.5pt; color: #1a2744; margin: 14px 0 6px 0; page-break-after: avoid; font-weight: 600; }
+p { margin: 0 0 9px 0; }
+ul, ol { margin: 0 0 10px 0; padding-left: 20px; }
+li { margin-bottom: 5px; }
+
+/* ── Cover ── */
+.cover {
+  width: 210mm; height: 297mm; margin: 0;
+  background: linear-gradient(160deg, #0d1b3e 0%, #1a2744 40%, #1e3a7a 70%, #0d1b3e 100%);
+  color: #fff; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative; overflow: hidden; page-break-after: always;
+  box-sizing: border-box; padding: 40px 40px;
+}
+.cover-logo { font-size: 11pt; letter-spacing: 3px; text-transform: uppercase; color: #a0b8e0;
+  margin-bottom: 48px; font-family: 'Helvetica Neue', Arial, sans-serif; font-weight: 300; }
+.cover h1 { font-size: 30pt; font-weight: 700; color: #ffffff; text-align: center;
+  letter-spacing: 0.5px; line-height: 1.3; margin: 0 0 12px 0; padding: 0 10px; max-width: 100%;
+  white-space: normal; overflow-wrap: break-word; word-wrap: break-word;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4); string-set: doctitle ""; }
+.cover-subtitle { font-size: 13pt; color: #c0d4f0; text-align: center; margin: 0 0 36px 0;
+  font-style: italic; line-height: 1.5; }
+.cover-divider { width: 80px; height: 2px; background: #4a90d9; margin: 0 auto 32px; }
+.cover-meta { font-size: 10pt; color: #a0b8e0; text-align: center; line-height: 1.9; }
+.cover-meta strong { color: #ffffff; }
+.cover-disclaimer { margin-top: 36px; padding: 14px 22px; border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px; background: rgba(255,255,255,0.06); font-size: 9pt; color: #c8d8f0;
+  text-align: center; font-style: italic; line-height: 1.6; max-width: 480px; }
+.cover-version-badge { position: absolute; top: 22px; right: 26px;
+  background: #4a90d9; color: #fff; padding: 4px 12px; border-radius: 3px;
+  font-size: 9pt; font-family: monospace; font-weight: 600; }
+
+/* ── Abstract, Changelog pages ── */
+.abstract-page { page-break-after: always; }
+.changelog-page { page-break-after: always; }
+
+/* ── TOC ── */
+.toc-page { }
+.toc-title { font-size: 20pt; color: #1a2744; margin-bottom: 22px; border-bottom: 2px solid #1a2744; padding-bottom: 6px; }
+.lof-title { font-size: 14pt; color: #1a2744; margin-top: 20px; margin-bottom: 12px; border-bottom: 1px solid #ccc; }
+.toc-list { list-style: none; padding: 0; margin: 0; column-count: 2; column-gap: 0.7cm; }
+.toc-list li { display: flex; align-items: baseline; padding: 3px 0; break-inside: avoid; }
+.toc-list li a { display: flex; align-items: baseline; width: 100%; text-decoration: none; color: #333; }
+.toc-list .toc-h1 .toc-text { font-weight: 700; font-size: 10.5pt; color: #1a2744; }
+.toc-list .toc-h2 { padding-left: 16px; }
+.toc-list .toc-h2 .toc-text { font-weight: 400; font-size: 9.5pt; color: #444; }
+.toc-text { white-space: nowrap; flex-shrink: 0; }
+.toc-dots { flex: 1; margin: 0 5px; border-bottom: 1.5px dotted #bbb; min-width: 20px; position: relative; top: -3px; }
+.toc-page-num { flex-shrink: 0; text-align: right; min-width: 18px; font-size: 9.5pt; color: #555; }
+
+/* ── Sections ── */
+.section { }
+
+/* ── Epistemic tags ── */
+.epist-tag { display: inline-block; padding: 1px 6px; border-radius: 3px;
+  font-size: 8.5pt; font-weight: 700; font-family: Arial, sans-serif;
+  margin-left: 4px; vertical-align: middle; white-space: nowrap; }
+.tag-postulate  { background: #c0392b; color: #fff; }
+.tag-definition { background: #2471a3; color: #fff; }
+.tag-proposition{ background: #1a7a4a; color: #fff; }
+.tag-empirical  { background: #d68910; color: #fff; }
+.tag-remark     { background: #6c3483; color: #fff; }
+
+/* ── Formal boxes ── */
+.postulate, .proposition, .definition, .assumption, .empirical, .remark {
+  border-left: 4px solid; padding: 10px 14px; margin: 12px 0 14px 0;
+  background: #f0f2f5; font-size: 10.5pt; line-height: 1.65; page-break-inside: avoid; }
+.postulate   { border-color: #c0392b; }
+.proposition { border-color: #1a7a4a; }
+.definition  { border-color: #2471a3; }
+.assumption  { border-color: #1a2744; }
+.empirical   { border-color: #d68910; }
+.remark      { border-color: #6c3483; }
+
+/* ── Correction note ── */
+.correction-note { border: 1.5px solid #e67e22; background: #fef9ef;
+  padding: 9px 13px; margin: 10px 0 14px 0; font-size: 10pt;
+  line-height: 1.6; page-break-inside: avoid; }
+.correction-note::before { content: "✎ Correction from v1.0/v1.1: ";
+  font-weight: 700; color: #e67e22; }
+
+/* ── Lane headers ── */
+.lane-header { padding: 6px 14px; margin: 14px 0 10px 0;
+  font-weight: 700; font-size: 10.5pt; letter-spacing: 0.5px; }
+.lane-quantum { background: #d6eaf8; border-left: 4px solid #2471a3; color: #1a2744; }
+.lane-ai      { background: #d5f5e3; border-left: 4px solid #1a7a4a; color: #1a2744; }
+.lane-control { background: #fef9e7; border-left: 4px solid #d68910; color: #1a2744; }
+.lane-org     { background: #f5eef8; border-left: 4px solid #6c3483; color: #1a2744; }
+
+/* ── Tables ── */
+table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 12px 0 16px 0; max-width: 100%; }
+th, td { padding: 5px 9px; border-bottom: 1px solid #ddd; }
+thead tr { background: #1a2744; color: #fff; }
+caption { caption-side: top; font-weight: 700; font-size: 9.5pt; margin-bottom: 6px; text-align: left; color: #1a2744; }
+caption::before { content: attr(data-label) "  "; font-weight: bold; }
+
+/* ── Figures ── */
+figure { margin: 16px 0; page-break-inside: avoid; max-height: 70vh; height: auto; width: 100%; object-fit: contain; }
+figure img { max-width: 100%; max-height: 70vh; height: auto; object-fit: contain; display: block; }
+figcaption { font-size: 9.5pt; margin-top: 7px; color: #444; line-height: 1.5; font-style: italic; }
+figcaption::before { content: attr(data-label) "  "; font-weight: bold; font-style: normal; }
+
+/* ── Overflow prevention ── */
+pre, table, figure, img, svg, blockquote, .equation, code {
+  max-width: 100%; box-sizing: border-box; overflow-wrap: break-word; }
+pre { overflow-x: auto; white-space: pre-wrap; word-wrap: break-word; }
+a { word-break: break-all; }
+.katex-display { overflow-x: auto; }
+
+/* ── References ── */
+.references ol { font-size: 10.5pt; line-height: 1.85; }
+
+/* ── Page breaks ── */
+h1, h2, h3 { page-break-after: avoid; }
+figure, .theorem, .algorithm { page-break-inside: avoid; max-height: 70vh; }
+tr { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="cover-version-badge">v1.2.1</div>
+  <div class="cover-logo">Remnant Fieldworks Inc.</div>
+  <h1>Inheritance Math Framework (IMF):<br>Formal Foundations of the Coherent Inheritance Framework</h1>
+  <div class="cover-subtitle">v1.2.1 Release Integrity Reconciliation (patch)<br><em>Phase 1 Candidate Framework for Open Review</em></div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <strong>Author:</strong> Derek Hone<br>
+    <strong>Affiliation:</strong> Remnant Fieldworks Inc., Westerville, Ohio<br>
+    <strong>Date:</strong> 2026 &nbsp;|&nbsp; <strong>Version:</strong> v1.2.1<br>
+    <strong>DOI:</strong> [Zenodo DOI pending — do not assign prior to final review]<br>
+    <strong>License:</strong> CC BY 4.0
+  </div>
+  <div class="cover-disclaimer">
+    "This document presents a candidate phenomenological modeling framework. All formal results are conditional on stated assumptions. No universal theorems about physical reality are claimed. The framework is offered for open critique, testing, and falsification."
+  </div>
+</div>
+
+<!-- ===== ABSTRACT ===== -->
+<div class="abstract-page">
+<h1 id="abstract">Abstract</h1>
+<p style="font-style:italic; margin-bottom:12px; font-size:10.5pt;">
+The Inheritance Math Framework (IMF) is the formal mathematical core of the Coherent Inheritance
+Framework (CIF) — a candidate phenomenological modeling vocabulary for studying how state,
+structure, and constraints propagate through inheritance chains across diverse system types.
+</p>
+<p style="margin-bottom:9px; font-size:10.5pt;">
+This v1.2.1 patch release applies additional targeted corrections to v1.2, addressing operator-order and model-description issues identified in subsequent review. The coherence balance postulate and all simulation code are now unified under
+a single equation, \(\dot{C} = -\alpha\bar{D} + \beta F + \gamma R\bar{u} - \delta C\); channel
+fidelity is renamed \(F\) (positive coefficient \(\beta\)) throughout, retiring the \(\bar{W}\)
+notation that carried an incorrect sign in the simulation code. Proposition 4.3 is reformulated
+to measure actual-versus-ideal trajectory deviation \(E_k = d(\rho^{\mathrm{actual}}_k,
+\rho^{\mathrm{ideal}}_k)\) rather than deviation from the initial state; the prior formulation
+incorrectly treated expected ideal evolution as error. Proposition 4.2 is correctly scoped as an
+instantaneous boundary non-exit condition rather than a global viability guarantee. Proposition 4.5
+adds the required drift-rate lower bound assumption \(v_{\min} &gt; 0\) that makes the finite
+warning-time estimate valid. An unsupported claim about error frequency is removed. Adaptive
+capacity is resolved as a domain-specific coefficient \(\gamma\) rather than an unnamed separate
+state variable. Language throughout is corrected to read "illustrated" rather than "validated"
+through simulations, and a claim of preliminary cross-domain evidence is replaced by the accurate
+"preliminary cross-domain conceptual correspondence."
+</p>
+<p style="margin-bottom:9px; font-size:10.5pt;">
+The simulation suite has been rebuilt in full to implement Model Postulate 4.1 exactly. Four
+lane instantiations, five propositions, and five empirical hypotheses are preserved. The framework
+remains a Phase 1 candidate, offered for open review, critique, and falsification.
+</p>
+<p style="margin-top:11px; font-size:10pt; color:#555;">
+<strong>Keywords:</strong> coherence, inheritance, drift, channel fidelity, resonance,
+adaptive capacity, quantum information, organizational dynamics, epistemic classification,
+actual-vs-ideal error
+</p>
+</div>
+
+<!-- ===== CHANGELOG ===== -->
+<div class="changelog-page">
+<h2 id="changelog" style="font-size:18pt; color:#1a2744; margin-bottom:14px;">Version History</h2>
+<table>
+  <thead><tr><th style="width:10%;">Version</th><th style="width:13%;">Date</th><th style="width:77%;">Change Summary</th></tr></thead>
+  <tbody>
+    <tr>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;"><strong>v1.2.1</strong></td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;"><strong>2026</strong></td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">
+        <strong>Release Integrity Reconciliation &mdash; patch:</strong><br>
+        &bull; <strong>Prop 4.3 proof fixed:</strong> Corrected operator order to \(N(J(\rho))\) &mdash; perturbation applied <em>after</em> channel &mdash; yielding the correct split \(\varepsilon_{k+1} + L_{k+1}\cdot E_k\). Prior v1.2 had \(J(N(\rho))\) which gives \(L(E_k+\varepsilon)\), mismatching the stated recurrence.<br>
+        &bull; <strong>Projected-model remark:</strong> Replaced parameter-domain condition with accurate description: simulations implement \(\Pi_{[0,1]}[C_n + \Delta t\cdot f(C_n)]\); negative raw equilibria represent lower-boundary pressure, not violations.<br>
+        &bull; <strong>State-vs-trajectory error distinction added:</strong> Prop 4.3 bounds state-at-landmark error \(E_k^{\mathrm{state}}\); trajectory-space error is a distinct concept deferred to future work.<br>
+        &bull; <strong>Figure 1 description replaced:</strong> Was: constant disruption levels; now: growing disruption, delayed stewardship at \(t=15\), resonance-matched from \(t=0\).<br>
+        &bull; <strong>Figure 6 description replaced:</strong> Was: running warning-time estimate, \(C_\theta=0.5\); now: mean coherence/drift panels, AUC bars, \(C_{\min}=0.25\), post-collapse exclusion.<br>
+        &bull; <strong>Convergence table removed:</strong> Replaced with reference to standalone <code>solver_convergence_check.py</code> and <code>solver_convergence_results.csv</code>.<br>
+        &bull; <strong>Figure 2 regime labels updated:</strong> From "High/Medium/Low Fidelity" to "Near-unity/Moderate/Strong contractivity"; added note on floor-ordering relationship.<br>
+        &bull; <strong>Figure 4 endpoint annotations fixed:</strong> Show \(C(60)\) (final simulated value), not \(C^*(0)\) (initial equilibrium formula).
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">v1.2</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">2026</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">
+        <strong>Release Integrity Reconciliation:</strong><br>
+        &bull; <strong>Prop 4.3 fixed:</strong> Added \(\varepsilon_k\) perturbation term to recurrence; updated closed-form bound to \(E_K \leq L^K E_0 + \varepsilon(1-L^K)/(1-L)\); established stable error floor \(E_\infty = \varepsilon/(1-L)\).<br>
+        &bull; <strong>Hypothesis 7.5 updated:</strong> from \"error decreases\" to \"error converges to positive stable floor\".<br>
+        &bull; <strong>Postulate 4.1 extended:</strong> Added parameter-domain condition ensuring \(C^* \in [0,1]\).<br>
+        &bull; <strong>Prop 4.6 fixed:</strong> Explicit opening hypothesis \(C^* \geq C_\theta\) (equivalently \(-\alpha\bar{D}+\beta F+\gamma R\bar{u} \geq \delta C_\theta\)) added.<br>
+        &bull; <strong>Assumption 2.9 replaced:</strong> Statistical independence removed; replaced with narrowed identification note.<br>
+        &bull; <strong>Control-lane attribution fixed:</strong> Fidelity result now correctly attributed to \(\beta F\) equilibrium term, not Proposition 4.4.<br>
+        &bull; <strong>Consistency claim softened:</strong> \"All formal results are internally consistent\" replaced by \"presented for further consistency review\".<br>
+        &bull; <strong>Section 8 fixed:</strong> Each figure's mathematical basis accurately classified (ODE, discrete recurrence, categorical, auxiliary model).<br>
+        &bull; <strong>Name correction:</strong> \"Integrated Maintenance Framework\" → \"Inheritance Math Framework (IMF)\" throughout.<br>
+        &bull; <strong>References contradiction fixed:</strong> Section now correctly states framework draws on, rather than ignores, cited literature.<br>
+        &bull; <strong>Figure numbering standardized:</strong> Figure 1–6 throughout (not Figure 8.X).<br>
+        &bull; <strong>Figure 5 caption updated:</strong> Categorical-label nature of alignment mapping explicitly stated.
+      </td>
+    </tr>
+    <tr style="background:#f5f5f5;">
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">v1.0</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">Aug 2026</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">Initial public review draft. Core balance law presented as derived theorem. Six results labeled as theorems. Channel fidelity referenced to ρ*. Jensen–Shannon divergence used directly (not metric form). Resonance defined as function of drift. No dimensional normalization.</td>
+    </tr>
+    <tr>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">v1.1</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">Aug 2026</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">
+        Mathematical correction: postulate reclassification (Balance Law → Model Postulate 4.1);
+        JS metric corrected to \(\sqrt{D_\mathrm{JS}}\); resonance redefined as intervention alignment
+        independent of drift; all scalars normalized to [0,1]; five propositions rebuilt; ExecutionProof
+        mapping revised (Ev = source validity; Merkle limitation noted); epistemic tags added throughout;
+        Section 0 notation table added.
+      </td>
+    </tr>
+    <tr style="background:#f5f5f5;">
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">v1.1.1</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">Aug 2026</td>
+      <td style="padding:6px 9px; border-bottom:1px solid #ddd;">
+        <strong>Second targeted correction pass:</strong><br>
+        • <strong>ODE unification:</strong> Postulate 4.1 and simulation code now both implement
+        \(\dot{C} = -\alpha\bar{D} + \beta F + \gamma R\bar{u} - \delta C\) exactly.<br>
+        • <strong>W̄ → F rename:</strong> Channel fidelity \(F\) with positive coefficient \(\beta\)
+        replaces \(\bar{W}\), which carried an incorrect sign in v1.1 code.<br>
+        • <strong>Prop 4.3 reformulated:</strong> Error measure changed from \(d(\rho_K, \rho_0)\) to
+        \(E_k = d(\rho^{\mathrm{actual}}_k, \rho^{\mathrm{ideal}}_k)\); contractivity constants
+        \(L_k\) added; frequency claim removed.<br>
+        • <strong>Prop 4.2 rescoped:</strong> Renamed instantaneous boundary non-exit condition;
+        global viability requires the condition to hold at all boundary times (stated explicitly).<br>
+        • <strong>Prop 4.5 extended:</strong> Drift-rate lower bound assumption \(v_{\min} &gt; 0\)
+        added for finite warning-time bound.<br>
+        • <strong>Adaptive capacity resolved:</strong> Identified as coefficient \(\gamma\); no
+        separate state variable.<br>
+        • <strong>Language corrections:</strong> "illustrated" not "validated"; "conceptual
+        correspondence" not "preliminary evidence".<br>
+        • <strong>Simulation suite rebuilt in full</strong> under corrected postulate.
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ===== TOC ===== -->
+<div class="toc-page">
+<h2 class="toc-title">Table of Contents</h2>
+<ul class="toc-list">
+  <li class="toc-h1"><a href="#abstract"><span class="toc-text">Abstract</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#abstract"></span></span></a></li>
+  <li class="toc-h1"><a href="#changelog"><span class="toc-text">Version History</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#changelog"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec0"><span class="toc-text">0. Notation and Conventions</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec0"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec1"><span class="toc-text">1. Introduction</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec1"></span></span></a></li>
+  <li class="toc-h2"><a href="#sec11"><span class="toc-text">1.1 Motivation</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec11"></span></span></a></li>
+  <li class="toc-h2"><a href="#sec14"><span class="toc-text">1.4 Relationship to Prior Versions</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec14"></span></span></a></li>
+  <li class="toc-h2"><a href="#sec15"><span class="toc-text">1.5 Forest–Trunks–Branches–Leaves</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec15"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec2"><span class="toc-text">2. Foundational Assumptions</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec2"></span></span></a></li>
+  <li class="toc-h2"><a href="#as211"><span class="toc-text">2.11 Channel Fidelity as Positive Contribution</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#as211"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec3"><span class="toc-text">3. Core Definitions</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec3"></span></span></a></li>
+  <li class="toc-h2"><a href="#def31"><span class="toc-text">3.1 Inheritance Channel Fidelity</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#def31"></span></span></a></li>
+  <li class="toc-h2"><a href="#def38"><span class="toc-text">3.8 Actual-vs-Ideal State-at-Landmark Error E_k (new)</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#def38"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec4"><span class="toc-text">4. Model Postulate and Propositions</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec4"></span></span></a></li>
+  <li class="toc-h2"><a href="#mp41"><span class="toc-text">4.1 Coherence Balance Law [POSTULATE]</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#mp41"></span></span></a></li>
+  <li class="toc-h2"><a href="#pr42"><span class="toc-text">4.2 Instantaneous Boundary Non-Exit Condition</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#pr42"></span></span></a></li>
+  <li class="toc-h2"><a href="#pr43"><span class="toc-text">4.3 Actual-vs-Ideal Inheritance Error Bound</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#pr43"></span></span></a></li>
+  <li class="toc-h2"><a href="#pr44"><span class="toc-text">4.4 Conditional Resonance Advantage</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#pr44"></span></span></a></li>
+  <li class="toc-h2"><a href="#pr45"><span class="toc-text">4.5 Drift Early Warning with Finite Time Bound</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#pr45"></span></span></a></li>
+  <li class="toc-h2"><a href="#pr46"><span class="toc-text">4.6 Admissible-Set Invariance</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#pr46"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec5"><span class="toc-text">5. Lane-by-Lane Instantiations</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec5"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec6"><span class="toc-text">6. Mapping to ExecutionProof / ProofRecord</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec6"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec7"><span class="toc-text">7. Empirical Hypotheses and Protocols</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec7"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec8"><span class="toc-text">8. Numerical Simulations</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec8"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec9"><span class="toc-text">9. Epistemic Status</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec9"></span></span></a></li>
+  <li class="toc-h2"><a href="#sec91"><span class="toc-text">9.1 What Is Established</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec91"></span></span></a></li>
+  <li class="toc-h2"><a href="#sec96"><span class="toc-text">9.6 Current Formal Status</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec96"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec10"><span class="toc-text">10. Relationship to RF Inc. Work</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec10"></span></span></a></li>
+  <li class="toc-h1"><a href="#sec11h"><span class="toc-text">11. Conclusion</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#sec11h"></span></span></a></li>
+  <li class="toc-h1"><a href="#references"><span class="toc-text">References</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#references"></span></span></a></li>
+</ul>
+<h3 class="lof-title">List of Figures</h3>
+<ul class="toc-list">
+  <li class="toc-h1"><a href="#fig1"><span class="toc-text">Figure 1. Core Balance Law: Three Scenarios</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig1"></span></span></a></li>
+  <li class="toc-h1"><a href="#fig2"><span class="toc-text">Figure 2. Inheritance Error: Actual vs. Ideal</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig2"></span></span></a></li>
+  <li class="toc-h1"><a href="#fig3"><span class="toc-text">Figure 3. Recovery Under Resonance Multiplier</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig3"></span></span></a></li>
+  <li class="toc-h1"><a href="#fig4"><span class="toc-text">Figure 4. Qualitative Lane Timing</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig4"></span></span></a></li>
+  <li class="toc-h1"><a href="#fig5"><span class="toc-text">Figure 5. ExecutionProof Alignment Matrix</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig5"></span></span></a></li>
+  <li class="toc-h1"><a href="#fig6"><span class="toc-text">Figure 6. Drift Early Warning: Internal Model Test</span><span class="toc-dots"></span><span class="toc-page-num"><span class="page-ref" data-href="#fig6"></span></span></a></li>
+</ul>
+</div>
+
+<!-- ===== SECTION 0 ===== -->
+<div class="section">
+<h1 id="sec0">0. Notation and Conventions</h1>
+<p>Symbols marked † are new or redefined in v1.1.1; double-dagger ‡ marks changes in v1.2. The symbol \(\bar{W}\) (used in v1.0 and v1.1 for channel fidelity/waste) is retired and replaced throughout by \(F\).</p>
+
+<table>
+  <thead><tr><th style="width:14%;">Symbol</th><th style="width:44%;">Meaning</th><th style="width:14%;">Range / Units</th><th style="width:28%;">Defined at</th></tr></thead>
+  <tbody>
+    <tr style="background:#f5f5f5;"><td>\(\mathcal{S}\)</td><td>State space (compact metric space)</td><td>—</td><td>Assumption 2.1</td></tr>
+    <tr><td>\(\rho(t),\rho^*\)</td><td>System state; reference (coherent) state</td><td>\(\mathcal{S}\)</td><td>Assumptions 2.1–2.2</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(F = (\mathcal{S}, T, I)\)</td><td>Field structure: state space, transition law, inheritance channel</td><td>—</td><td>§1.5</td></tr>
+    <tr><td>\(J\)</td><td>Ideal inheritance channel</td><td>\(\mathcal{S}_P \to \mathcal{S}_C\)</td><td>Definition 3.1</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(N_k\)</td><td>Perturbation operator at step k (preserves state space structure)</td><td>CPTP / stochastic kernel</td><td>Definition 3.6</td></tr>
+    <tr><td>\(d(\cdot,\cdot)\)</td><td>Domain-appropriate metric</td><td>\(\mathbb{R}_{\geq 0}\)</td><td>Assumption 2.1</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(\bar{D}(t)\)</td><td>Normalized drift \(\in [0,1]\) (negative effect on C)</td><td>\([0,1]\)</td><td>Definition 3.2</td></tr>
+    <tr><td>\(F(t)\) †</td><td>Channel fidelity \(\in [0,1]\) (positive effect on C, coefficient \(\beta\))</td><td>\([0,1]\)</td><td>Assumption 2.11 / Def 3.1</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(C(t)\)</td><td>Coherence functional \(\in [0,1]\)</td><td>\([0,1]\)</td><td>Definition 3.5</td></tr>
+    <tr><td>\(C_{\min}\)</td><td>Viability floor</td><td>\((0,1)\)</td><td>Definition 3.7</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(R(t)\)</td><td>Resonance — intervention alignment \(\in [0,1]\)</td><td>\([0,1]\)</td><td>Assumption 2.10</td></tr>
+    <tr><td>\(\bar{u}(t)\)</td><td>Normalized stewardship input \(\in [0,1]\)</td><td>\([0,1]\)</td><td>Assumption 2.6</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(\alpha,\beta,\gamma,\delta\)</td><td>Rate coefficients: drift loss, fidelity gain, resonance gain, natural decay</td><td>\(T^{-1}, \geq 0\)</td><td>Postulate 4.1</td></tr>
+    <tr><td>\(E = \{\rho: h_i(\rho) \leq 0\}\)</td><td>Non-harm (admissible) envelope; \(h_i\) are constraint functions</td><td>subset of \(\mathcal{S}\)</td><td>Definition 3.7</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(\pi = (A, \mathrm{Ev}, K, \mathrm{Rec})\)</td><td>Proof state: Authority, Evidence, Constraints, Record</td><td>—</td><td>Definition 3.7</td></tr>
+    <tr><td>\(F_I\)</td><td>Inheritance channel fidelity (relative to J)</td><td>\([0,1]\)</td><td>Definition 3.1</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(E_k\) †</td><td>Actual-vs-ideal state-at-landmark error at generation k</td><td>\(\geq 0\)</td><td>Definition 3.8</td></tr>
+    <tr><td>\(\epsilon_k\)</td><td>Per-generation perturbation bound: \(d(N_k(x),x) \leq \epsilon_k\)</td><td>\(\geq 0\)</td><td>Proposition 4.3</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(L_k\) †</td><td>Contractivity constant of ideal channel \(J_k\)</td><td>\([0,1]\)</td><td>Proposition 4.3</td></tr>
+    <tr><td>\(\varphi\) †</td><td>Monotone coherence-from-drift function: \(C = \varphi(\bar{D})\), \(\varphi' \leq -m &lt; 0\)</td><td>\(\mathbb{R}_{\geq 0} \to [0,1]\)</td><td>Proposition 4.5</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(v_{\min}\) †</td><td>Minimum drift growth rate (lower bound for finite time estimate)</td><td>\(T^{-1}, &gt; 0\)</td><td>Proposition 4.5</td></tr>
+    <tr><td>AUC †</td><td>Area under ROC curve (landmark-time methodology)</td><td>\([0,1]\)</td><td>Section 8, Figure 6</td></tr>
+    <tr style="background:#f5f5f5;"><td>\(D_\mathrm{JS}\)</td><td>Jensen–Shannon divergence; metric form: \(\sqrt{D_\mathrm{JS}}\)</td><td>\([0,\ln 2]\)</td><td>Definition 3.6</td></tr>
+    <tr><td>\(\bar{W}\) (retired)</td><td>Retired v1.0/v1.1 symbol; replaced by \(F\) throughout</td><td>—</td><td>See v1.1 changelog</td></tr>
+  </tbody>
+</table>
+<p style="font-size:9.5pt; color:#555;">† Symbol new or redefined in v1.1.1. ‡ Symbol updated in v1.2.</p>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section">
+<h1 id="sec1">1. Introduction</h1>
+
+<h2 id="sec11">1.1 Motivation</h2>
+<p>Across radically different scientific domains — quantum information theory, machine learning,
+control engineering, and organizational management — a common phenomenology recurs: a structured
+system defined by an initial coherent state tends to drift from that state over time unless actively
+maintained. The quantum computer's entangled register decoheres under environmental noise; the
+trained neural network's predictions degrade under distributional shift; the factory's calibrated
+production process drifts from specification; the organization's strategic alignment erodes under
+personnel turnover and changing priorities.</p>
+
+<p>These phenomena share a mathematical skeleton: a state space, a target configuration, a drift
+process pushing the system away, a transmission channel of variable quality, and optional
+interventions that can slow or reverse the drift. The Inheritance Math Framework (IMF) is an
+attempt to make that skeleton explicit, domain-agnostic, and mathematically tractable as a
+candidate phenomenological vocabulary — a Phase 1 framework offered for open critique and
+falsification.</p>
+
+<h2>1.2 Scope</h2>
+<p>IMF provides formal mathematical language for the Coherent Inheritance Framework (CIF). It does
+not claim to derive new fundamental results in quantum information, control theory, or information
+theory. Its value is architectural: a shared vocabulary that enables comparable questions to be
+asked across domains, and a structured protocol for experimental validation. The framework is
+domain-agnostic; its quantitative predictions in any specific domain are subject to the empirical
+hypotheses of Section 7.</p>
+
+<h2>1.3 What This Document Does and Does Not Claim</h2>
+<p>This document claims: (a) the formal structure has undergone three correction passes and is presented for further consistency review — as documented in the version history, each pass has identified and corrected genuine structural issues; (b) the four lane instantiations of Section 5 are plausible mappings of the abstract framework to concrete domain objects; (c) the simulations of Section 8 correctly illustrate the model's postulated behavior for their respective mathematical objects. This document does <em>not</em> claim that any real system follows the coherence balance law, that the lane analogies hold quantitatively, or that the simulations constitute empirical evidence from real systems.</p>
+
+<h2 id="sec14">1.4 Relationship to Prior Versions</h2>
+<p>Version 1.0 presented six alleged "theorems," several of which were definitional statements or
+carried invalid inferences. Version 1.1 reclassified the core equation as a Model Postulate,
+repaired the Jensen–Shannon metric, separated resonance from drift, introduced normalized
+variables, and rebuilt five propositions with explicit assumptions. Version 1.1.1 corrects the
+remaining issues identified in a second adversarial review:</p>
+<ul style="font-size:10.5pt; line-height:1.75; margin-left:18px;">
+  <li><strong>ODE mismatch:</strong> The v1.1 simulation code implemented a different algebraic
+      form from the whitepaper's Postulate 4.1 (\(k_R R + k_u \bar{u} + k_{Ru} R\bar{u}
+      - k_D \bar{D} - k_W \bar{W}\) vs. \(-\alpha\bar{D} + \beta\bar{W} + \gamma R\bar{u}
+      - \delta C\)), and treated \(\bar{W}\) as a waste/negative term. Both forms are now unified
+      into the single canonical equation \(\dot{C} = -\alpha\bar{D} + \beta F + \gamma R\bar{u}
+      - \delta C\).</li>
+  <li><strong>Sign error / notation:</strong> \(\bar{W}\) carried an incorrect negative coefficient
+      in code. Retired. Channel fidelity is now \(F\) with positive coefficient \(\beta\).</li>
+  <li><strong>Proposition 4.3:</strong> Error measured against \(\rho_0\) (initial state) treated
+      expected ideal evolution as error. Reformulated around actual-vs-ideal state-at-landmark error
+      \(E_k = d(\rho^{\mathrm{actual}}_k, \rho^{\mathrm{ideal}}_k)\) with contractivity constants
+      \(L_k\).</li>
+  <li><strong>Proposition 4.2:</strong> Stated as global viability guarantee. A derivative
+      condition at one instant does not guarantee future viability. Correctly scoped as
+      instantaneous boundary non-exit condition.</li>
+  <li><strong>Proposition 4.5:</strong> Did not produce a finite warning-time estimate without an
+      additional assumption. Drift-rate lower bound \(v_{\min} &gt; 0\) added for the time bound.</li>
+  <li><strong>Frequency claim:</strong> "Frequent small errors more damaging than rare large errors"
+      removed — does not follow from the triangle bound.</li>
+  <li><strong>Adaptive capacity:</strong> Named in prior abstracts as a fourth interacting quantity
+      but absorbed into \(\gamma\) without explanation. Resolved: \(\gamma\) is the domain-specific
+      adaptive capacity coefficient.</li>
+  <li><strong>Language:</strong> "Validated qualitatively through simulations" → "illustrated through
+      simulations"; "preliminary cross-domain evidence" → "preliminary cross-domain conceptual
+      correspondence."</li>
+</ul>
+
+<h2 id="sec15">1.5 Forest–Trunks–Branches–Leaves Hierarchy</h2>
+<p>IMF organizes domain knowledge in a four-tier hierarchy. The <em>Forest</em> is the domain itself
+— quantum, AI, control, or organizational — the context in which coherence matters. <em>Trunks</em>
+are persistent structural patterns: the target state \(\rho^*\), the admissible set \(\mathcal{A}\),
+the ideal channel \(J\). <em>Branches</em> are operational subsystems — the four lanes (Section 5)
+— each applying the Balance Law with domain-specific instantiations. <em>Leaves</em> are individual
+transmission events where error accumulation begins.</p>
+
+<p>The field structure \(F = (\mathcal{S}, T, I)\) consists of: the state space \(\mathcal{S}\),
+an autonomous transition law \(T : \mathcal{S} \times \mathbb{R}_{\geq 0} \to \mathcal{S}\)
+governing unperturbed evolution, and an inheritance channel \(I : \mathcal{S}_P \to \mathcal{S}_C\)
+mapping parent states to child states. The ideal channel \(J\) defines what inheritance
+<em>would</em> produce without perturbation. The ProofRecord system (Section 6) records events at
+the leaf level and aggregates them upward toward trunk-level viability assessments.</p>
+
+<h2>1.6 Paper Organization</h2>
+<p>Section 0 fixes notation. Sections 2–3 establish foundational assumptions and core definitions.
+Section 4 presents the model postulate and five propositions with proofs. Section 5 gives
+lane-by-lane instantiations. Section 6 maps to ExecutionProof / ProofRecord. Section 7 states
+five empirical hypotheses with experimental protocols. Section 8 presents rebuilt numerical
+simulations. Section 9 provides an honest epistemic assessment including adjacency comparisons.
+Sections 10–11 describe the RF Inc. connection and conclude.</p>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section">
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.1</span>
+  <strong>Bounded Coherence State.</strong> The coherence variable \(C(t) \in [0, C_{\max}]\) for some finite \(C_{\max} > 0\). Coherence is non-negative and bounded above by a domain-specific ceiling. For analysis, we often normalise so that \(C_{\max} = 1\).
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.2</span>
+  <strong>Continuous Differentiability.</strong> The function \(C(t)\) is continuously differentiable on its domain of definition. Discrete-time implementations approximate this with sufficiently small step sizes.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.3</span>
+  <strong>Well-Defined Disruption Magnitude.</strong> For any system trajectory, the disruption \(D(t) \geq 0\) is measurable and its time-average \(\bar{D}\) is well-defined. Disruption is treated as an exogenous or semi-exogenous driving signal.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.4</span>
+  <strong>Well-Defined Control Input.</strong> The control input \(u(t) \in [0,1]\) is measurable and its mean \(\bar{u}\) is well-defined over the time horizon of interest. Control represents the normalised effort or resource allocation applied to coherence maintenance.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.5</span>
+  <strong>Resonance Measurability.</strong> The resonance metric \(R \in [0,1]\) is a well-defined, observable or estimable quantity for each system instance. \(R\) captures the degree to which control effort and system structure are mutually aligned.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.6</span>
+  <strong>Constant Coefficients.</strong> The parameters \(\alpha, \beta, \gamma, \delta > 0\) are constant over the time horizon under analysis. Time-varying extensions are permitted but require re-derivation of propositions.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.7</span>
+  <strong>Linear Superposition of Influences.</strong> The instantaneous rate of change of coherence is a linear sum of driving terms. No higher-order interaction terms are included in the base model. This assumption may be relaxed in extended formulations.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.8</span>
+  <strong>Decay Proportionality.</strong> The passive decay of coherence is proportional to its current level, with rate coefficient \(\delta > 0\). This reflects the empirical observation that coherence erodes faster when it is higher, absent active maintenance.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">NOTE 2.9</span>
+  <strong>On Identification of Input Quantities.</strong>
+  <span class="correction-note">Replaces v1.1.1 Assumption 2.9 (statistical independence). Statistical independence was an over-strong foundational requirement; it is here downgraded to a modelling note.</span>
+  The four input quantities \(\bar{D}\), \(F\), \(R\), and \(\bar{u}\) may be empirically correlated. The ODE of Postulate 4.1 does not require statistical independence for its mathematical formulation &mdash; it is a deterministic (or stochastic) differential equation in state \(C(t)\). In empirical estimation contexts, one may impose a working-independence assumption for parameter identification; this is a modelling choice, not a foundational requirement. The simulation suite intentionally couples these variables (e.g., a stewardship intervention simultaneously raises \(\bar{u}\), \(R\), and \(F\) while reducing \(\bar{D}\)) to reflect realistic dynamics.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.10</span>
+  <strong>Resonance Alignment.</strong> When \(R = 0\) the resonance term contributes nothing to \(\dot{C}\) regardless of control effort \(\bar{u}\). Maximal amplification of control input occurs at \(R = 1\). This multiplicative structure captures the intuition that control effort is wasted without structural alignment.
+</div>
+<div class="assumption">
+  <span class="tag tag-postulate">ASSUMPTION 2.11</span>
+  <strong>Channel Fidelity as a Positive Driver.</strong> The channel fidelity \(F \in [0,1]\) enters the ODE with a strictly positive coefficient \(\beta > 0\). Higher fidelity of information or interaction channels between system components increases the coherence growth rate. This corrects the v1.0/v1.1 convention in which the analogous variable \(\bar{W}\) had ambiguous sign; see §1.4 and the Change Log.
+</div>
+<p>Together these eleven assumptions define the modeling regime within which the IMF ODE and its associated propositions are valid. Violations of any assumption — for instance, strongly time-varying \(\alpha\), or non-linear decay — require explicit acknowledgment when the framework is applied.</p>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section">
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.1</span>
+  <strong>Coherence \(C(t)\).</strong> A scalar quantity \(C : \mathbb{R}_{\geq 0} \to [0, C_{\max}]\) representing the degree of internal structural alignment, functional integrity, or operational continuity of the system at time \(t\). In the normalised form \(C_{\max} = 1\), the coherence state space is the unit interval.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.2</span>
+  <strong>Disruption \(D(t)\) and Mean Disruption \(\bar{D}\).</strong> The disruption \(D : \mathbb{R}_{\geq 0} \to \mathbb{R}_{\geq 0}\) is an exogenous or semi-exogenous forcing function representing shocks, stress, or entropy production that degrades coherence. Its time-average over a relevant horizon is denoted \(\bar{D} = \frac{1}{T}\int_0^T D(t)\,dt\).
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.3</span>
+  <strong>Resonance Metric \(R\).</strong> A scalar \(R \in [0,1]\) measuring the structural alignment between the control mechanism and the system's internal dynamics. \(R = 0\) indicates complete misalignment; \(R = 1\) indicates perfect resonant coupling. The resonance metric modulates the effective contribution of control effort to coherence growth.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.4</span>
+  <strong>Control Input \(u(t)\) and Mean Control \(\bar{u}\).</strong> The control input \(u : \mathbb{R}_{\geq 0} \to [0,1]\) is the normalised effort, resource allocation, or corrective action applied to maintain coherence. Its time-mean \(\bar{u} = \frac{1}{T}\int_0^T u(t)\,dt\) is the primary driver of the resonance term in the ODE.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.5</span>
+  <strong>Channel Fidelity \(F\) and Gain/Loss Functions.</strong>
+  <span class="correction-note">Renamed from \(\bar{W}\) in v1.0/v1.1. Sign corrected to strictly positive contribution.</span>
+  Channel fidelity \(F \in [0,1]\) quantifies the quality, reliability, or throughput of the information or interaction channel coupling subsystems within the agent. The gain function \(G : [0,1] \to \mathbb{R}_{\geq 0}\) is \(G(F) = \beta F\), contributing positively to \(\dot{C}\). The loss function \(L : \mathbb{R}_{\geq 0} \to \mathbb{R}_{\geq 0}\) is \(L(\bar{D}) = \alpha \bar{D}\), contributing negatively.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.6</span>
+  <strong>Admissible Coherence Set \(\mathcal{A}\).</strong> For a given threshold \(C_{\theta} \in (0, C_{\max})\), the admissible set is \(\mathcal{A} = \{C : C \geq C_{\theta}\}\). A trajectory is called <em>viable</em> if \(C(t) \in \mathcal{A}\) for all \(t\) in a specified horizon.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.7</span>
+  <strong>Adaptive Capacity.</strong>
+  <span class="correction-note">In v1.0/v1.1 adaptive capacity was treated as a separate state variable. In v1.1.1 it is identified with the coefficient \(\gamma\).</span>
+  The adaptive capacity of the system is the coefficient \(\gamma > 0\) in the ODE, which scales the contribution of resonant control to coherence. A system with higher \(\gamma\) responds more strongly to aligned control effort. This is not a dynamic state variable but a structural parameter that may be estimated from trajectory data.
+</div>
+<div class="definition">
+  <span class="tag tag-definition">DEFINITION 3.8</span>
+  <strong>Actual-vs-Ideal Error \(E_k\).</strong>
+  <span class="correction-note">New in v1.1.1. Prior versions measured error relative to \(\rho_0\) (initial state); this definition corrects that. Updated in v1.2: the \(\varepsilon_k\) perturbation bound is added as a key component.</span>
+  For system instance \(k\), let \(\rho_{\text{actual},k}\) denote the observed coherence trajectory and \(\rho_{\text{ideal},k}\) the trajectory predicted by the IMF ODE under nominal parameters. The actual-vs-ideal error at landmark time \(t_k\) is
+  $$E_k = d\!\left(\rho_{\text{actual},k},\, \rho_{\text{ideal},k}\right)$$
+  where \(d\) is a suitable distance or divergence on trajectory space (e.g., Euclidean norm of pointwise differences, or a Wasserstein distance). The Lipschitz contraction constant \(L_k \in [0,1)\) bounds the growth of \(E_k\) over successive landmark intervals; see Proposition 4.3.
+</div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section">
+<div class="postulate">
+  <span class="tag tag-postulate">POSTULATE 4.1</span>
+  <strong>The IMF Coherence ODE.</strong>
+  <span class="correction-note">Unified in v1.1.1. The simulation code and this paper now share a single canonical equation.</span>
+  The rate of change of the coherence variable \(C(t)\) is governed by the first-order linear ODE:
+  $$\frac{dC}{dt} = -\alpha \bar{D} + \beta F + \gamma R \bar{u} - \delta C$$
+  where all parameters \(\alpha, \beta, \gamma, \delta > 0\) and all driving signals \(\bar{D}, F, R, \bar{u} \in [0,1]\). The four terms represent: (i) coherence loss due to mean disruption at rate \(\alpha\); (ii) coherence gain from channel fidelity at rate \(\beta\); (iii) resonance-amplified control contribution at rate \(\gamma\); and (iv) passive coherence decay at rate \(\delta\). Setting \(\dot{C} = 0\) gives the unique equilibrium
+  $$C^* = \frac{-\alpha \bar{D} + \beta F + \gamma R \bar{u}}{\delta}$$
+  which is globally attracting for this linear autonomous system.
+
+  <div class="remark" style="margin-top:12px;">
+    <span class="tag tag-remark">REMARK (Simulation Model &mdash; Projected Dynamics)</span>
+    <strong>Projected Discrete Implementation.</strong>
+    <span class="correction-note">Revised in v1.2.1: replaces the v1.2 parameter-domain condition with an accurate description of how the companion simulations implement domain enforcement.</span>
+    The continuous-time ODE does not intrinsically enforce \(C(t) \in [0,1]\). The formal equilibrium is \(C^* = (-\alpha\bar{D} + \beta F + \gamma R\bar{u})/\delta\), which may be negative when disruption dominates (e.g., the Unmanaged scenario). The companion simulations implement the projected discrete system:
+    $$C_{n+1} = \Pi_{[0,1]}\!\left[C_n + \Delta t \cdot f(C_n)\right]$$
+    where \(\Pi_{[0,1]}\) denotes projection onto \([0,1]\). Under this model, a negative raw equilibrium represents pressure against the lower boundary &mdash; the system is driven toward \(C=0\) but cannot go below it. Clipping is part of the simulation model, not a post-hoc safety guard. A parameter-restricted formulation (requiring \(0 \leq -\alpha\bar{D} + \beta F + \gamma R\bar{u} \leq \delta\) for all \(t\)) or a saturating ODE (e.g., \(\dot{C} = (1-C)(\beta F + \gamma R\bar{u}) - C(\alpha\bar{D} + \delta)\)) that intrinsically preserves \(C \in [0,1]\) are left as directions for future development.
+  </div>
+</div>
+
+<div class="proposition">
+  <span class="tag tag-proposition">PROPOSITION 4.2</span>
+  <strong>Instantaneous Boundary Non-Exit Condition.</strong>
+  <span class="correction-note">Renamed from v1.1's "global viability guarantee". This proposition characterises only the instantaneous rate at the boundary, not a global forward-invariance claim.</span>
+  Let \(C_{\theta} > 0\) be a coherence threshold. If at time \(t_0\) we have \(C(t_0) = C_{\theta}\), then \(\dot{C}(t_0) \geq 0\) (the trajectory does not immediately exit the admissible set \(\mathcal{A} = \{C \geq C_{\theta}\}\)) if and only if
+  $$\beta F + \gamma R \bar{u} \geq \alpha \bar{D} + \delta C_{\theta}.$$
+  <em>Proof.</em> Substituting \(C(t_0) = C_{\theta}\) into Postulate 4.1 gives \(\dot{C}(t_0) = -\alpha\bar{D} + \beta F + \gamma R\bar{u} - \delta C_{\theta}\). Non-negativity of this expression is the stated condition. \(\square\)
+  <br><br>
+  <em>Remark.</em> This is a local, instantaneous condition. Global persistence in \(\mathcal{A}\) requires that the condition holds along the entire trajectory, which in turn depends on how \(\bar{D}\), \(F\), \(R\), and \(\bar{u}\) evolve over time.
+</div>
+
+<div class="remark" style="margin-bottom:10px;">
+  <span class="tag tag-remark">NOTE ON ERROR TYPES</span>
+  <strong>State-at-landmark vs. trajectory error.</strong>
+  Definition 3.8 defines trajectory-space error \(E_k^{\mathrm{traj}} = d_{\mathcal{T}}(\rho^{\mathrm{actual}}_{[t_{k-1},t_k]},\, \rho^{\mathrm{ideal}}_{[t_{k-1},t_k]})\) comparing continuous path segments. Proposition 4.3 instead bounds state-at-landmark error \(E_k^{\mathrm{state}} = d_{\mathcal{S}}(\rho_k^{\mathrm{actual}},\, \rho_k^{\mathrm{ideal}})\) at discrete inheritance events. These are related &mdash; trajectory error between landmarks can be bounded in terms of state errors at landmarks under Lipschitz continuity of the ODE &mdash; but they are distinct objects. Proposition 4.3 explicitly concerns state-at-landmark error. Whole-trajectory error bounds are deferred to future work.
+</div>
+
+<div class="proposition">
+  <span class="tag tag-proposition">PROPOSITION 4.3</span>
+  <strong>Bounded State-at-Landmark Error Accumulation.</strong>
+  <span class="correction-note">Corrected in v1.2: perturbation term \(\varepsilon_k\) added. Corrected in v1.2.1: operator order fixed to \(N_{k+1}(J_{k+1}(\rho))\) — perturbation applied <em>after</em> the channel — yielding the correct split \(\varepsilon_{k+1} + L_{k+1}\cdot E_k\). Prior v1.2 had \(J_{k+1}(N_{k+1}(\rho))\) which gives \(L_{k+1}(E_k+\varepsilon_{k+1})\), mismatching the stated recurrence.</span>
+  <em>[Model Proposition &mdash; requires stated assumptions]</em>
+
+  Let \(\{J_k\}_{k=1}^{K}\) be a sequence of inheritance channels, each with contractivity constant \(L_k = \mathrm{Lip}(J_k) \leq 1\), and let \(N_k\) be a perturbation operator with \(\|N_k(\rho) - \rho\| \leq \varepsilon_k\) for all admissible \(\rho\). Define the state-at-landmark error:
+  $$E_k = d_{\mathcal{S}}\!\left(\rho_k^{\mathrm{actual}},\, \rho_k^{\mathrm{ideal}}\right) \quad [\text{state-at-landmark error}]$$
+  where \(\rho_k^{\mathrm{ideal}} = J_k \circ \cdots \circ J_1(\rho_0)\) is the perturbation-free reference trajectory and \(\rho_{k+1}^{\mathrm{actual}} = N_{k+1}(J_{k+1}(\rho_k^{\mathrm{actual}}))\) (perturbation applied <em>after</em> the ideal channel). Then:
+  $$E_{k+1} \leq L_{k+1} \cdot E_k + \varepsilon_{k+1}.$$
+
+  <em>Proof sketch.</em> By the triangle inequality and contractivity of \(J_{k+1}\):
+  $$E_{k+1} = d\!\left(N_{k+1}(J_{k+1}(\rho_k^{\mathrm{actual}})),\, J_{k+1}(\rho_k^{\mathrm{ideal}})\right)$$
+  $$\leq d\!\left(N_{k+1}(J_{k+1}(\rho_k^{\mathrm{a}})),\, J_{k+1}(\rho_k^{\mathrm{a}})\right) + d\!\left(J_{k+1}(\rho_k^{\mathrm{a}}),\, J_{k+1}(\rho_k^{\mathrm{i}})\right)$$
+  $$\leq \varepsilon_{k+1} + L_{k+1} \cdot E_k. \quad\square$$
+
+  The recursive bound gives the closed form:
+  $$E_K \leq E_0 \prod_{j=1}^{K} L_j \;+\; \sum_{i=1}^{K} \varepsilon_i \prod_{j=i+1}^{K} L_j.$$
+  For constant \(L &lt; 1\) and constant \(\varepsilon\):
+  $$E_K \leq L^K E_0 + \varepsilon \cdot \frac{1 - L^K}{1 - L}.$$
+  As \(K \to \infty\): \(E_\infty \leq \dfrac{\varepsilon}{1-L}\).
+
+  <strong>Implication.</strong> Error converges toward a stable positive floor \(\varepsilon/(1-L)\), not necessarily to zero. Zero-floor convergence holds only when \(\varepsilon_k = 0\) (perturbation-free inheritance). Under realistic conditions with bounded perturbations, the system achieves bounded error accumulation, not perfect fidelity.
+
+  <em>Epistemic tag: Model Proposition &mdash; validity contingent on Assumptions 2.1&ndash;2.8 and stated contractivity bounds. Not derived from empirical data.</em>
+</div>
+
+<div class="proposition">
+  <span class="tag tag-proposition">PROPOSITION 4.4</span>
+  <strong>Resonance Advantage.</strong>
+  Consider two system instances with identical parameters \(\alpha, \beta, \delta\) and identical \(\bar{D}\), \(F\), \(\bar{u}\), but resonance values \(R_1 &gt; R_2\). Then at every time \(t &gt; 0\),
+  $$C_1(t) &gt; C_2(t) \quad \text{and} \quad C^*_1 &gt; C^*_2.$$
+  <em>Proof.</em> The ODE is linear, so \(C_1(t) - C_2(t)\) satisfies \(\frac{d}{dt}(C_1 - C_2) = \gamma(R_1 - R_2)\bar{u} - \delta(C_1 - C_2)\). This is a linear ODE with positive forcing \(\gamma(R_1-R_2)\bar{u} &gt; 0\) (since \(R_1 &gt; R_2\) and \(\gamma, \bar{u} &gt; 0\)) and decay rate \(\delta &gt; 0\). Starting from \(C_1(0) = C_2(0)\), the difference \(C_1(t) - C_2(t) &gt; 0\) for all \(t &gt; 0\). \(\square\)
+</div>
+
+<div class="proposition">
+  <span class="tag tag-proposition">PROPOSITION 4.5</span>
+  <strong>Drift-Rate Lower Bound and Finite Warning Time.</strong>
+  <span class="correction-note">v1.1.1 adds the requirement \(v_{\min} &gt; 0\) for the finite-time bound to be valid.</span>
+  Suppose the coherence trajectory is drifting toward the threshold \(C_{\theta}\) at rate \(v(t) = -\dot{C}(t) &gt; 0\). Assume there exists \(v_{\min} &gt; 0\) such that \(v(t) \geq v_{\min}\) for all \(t\) in the drift epoch. Then the time remaining until \(C_{\theta}\) is crossed satisfies
+  $$\tau \leq \frac{C(t) - C_{\theta}}{v_{\min}}.$$
+  Without the \(v_{\min} &gt; 0\) lower bound — for instance when the drift rate decays to zero asymptotically — only an asymptotic warning can be given; the finite bound does not apply.
+  <br><br>
+  <em>Proof.</em> Under the stated conditions, \(C(t') \leq C(t) - v_{\min}(t'-t)\) for \(t' \geq t\). Setting \(C(t') = C_{\theta}\) and solving gives \(t' - t \leq (C(t) - C_{\theta})/v_{\min}\). \(\square\)
+</div>
+
+<div class="proposition">
+  <span class="tag tag-proposition">PROPOSITION 4.6</span>
+  <strong>Admissible-Set Invariance Under Constant Drivers.</strong>
+  <span class="correction-note">Fixed in v1.2: the opening hypothesis now explicitly states \(C^* \geq C_{\theta}\) (not merely \(C^* &gt; 0\)). The prior version's positive-forcing condition \(\beta F + \gamma R\bar{u} \geq \alpha\bar{D}\) only guarantees \(C^* \geq 0\), not \(C^* \geq C_{\theta}\) for arbitrary positive thresholds.</span>
+
+  <strong>Condition (opening hypothesis).</strong> The set \(\mathcal{A} = \{C : C \geq C_{\theta}\}\) is forward-invariant under Postulate 4.1 if and only if \(C^* \geq C_{\theta}\), equivalently:
+  $$-\alpha\bar{D} + \beta F + \gamma R\bar{u} \geq \delta \cdot C_{\theta}.$$
+
+  <strong>Proposition.</strong> Let the driving signals \(\bar{D}\), \(F\), \(R\), \(\bar{u}\) be constant and satisfy the above condition. Then for any initial condition \(C(0) \geq 0\) the trajectory converges monotonically to \(C^* = (-\alpha\bar{D} + \beta F + \gamma R\bar{u})/\delta \geq C_{\theta}\). The admissible set \(\mathcal{A} = \{C \geq C_{\theta}\}\) is forward-invariant: if \(C(0) \geq C_{\theta}\) then \(C(t) \geq C_{\theta}\) for all \(t \geq 0\).
+  <br><br>
+  <em>Proof.</em> The equilibrium \(C^*\) satisfies \(\dot{C}|_{C=C^*} = 0\). For \(C &lt; C^*\), \(\dot{C} &gt; 0\); for \(C &gt; C^*\), \(\dot{C} &lt; 0\). Hence \(C^*\) is globally attracting. The condition \(-\alpha\bar{D} + \beta F + \gamma R\bar{u} \geq \delta C_{\theta}\) ensures \(C^* \geq C_{\theta}\). If \(C(0) \geq C_{\theta}\) and \(C^* \geq C_{\theta}\), the trajectory either decreases from above \(C^*\) toward \(C^*\) or increases toward \(C^*\); in either case it never crosses below \(C_{\theta} \leq C^*\). \(\square\)
+</div>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section">
+<p>The IMF framework is domain-agnostic. This section instantiates the canonical ODE (Postulate 4.1) in four representative lanes, demonstrating how the abstract variables \(C\), \(\bar{D}\), \(F\), \(R\), and \(\bar{u}\) map to concrete measurables. In each lane the channel-fidelity variable is denoted \(F\) per the v1.1.1 convention; the v1.0/v1.1 symbol \(\bar{W}\) is retired.</p>
+
+<div class="lane-header lane-quantum">§5.1 Quantum Lane</div>
+<p>In quantum information processing, state coherence must be maintained against environmental decoherence. The IMF variables instantiate as follows:</p>
+<ul>
+  <li><strong>\(C(t)\):</strong> quantum state coherence — operationally, the off-diagonal magnitude of the system's density matrix in the energy eigenstate basis.</li>
+  <li><strong>\(\bar{D}\):</strong> mean decoherence rate due to environmental coupling (bath spectral density integrated over the relevant frequency band).</li>
+  <li><strong>\(F\) (channel fidelity, \(F_{\text{ch}}\)):</strong> fidelity of the quantum channel used for state preparation, gate operations, or information transfer. Specifically \(F_{\text{ch}} = \frac{1}{|G|}\sum_{g \in G} \langle g | \mathcal{E}(|g\rangle\langle g|) | g\rangle\) where \(\mathcal{E}\) is the implemented channel and \(G\) is a reference gate set. <em>Note on notation:</em> in the quantum-optics literature the symbol \(F\) also denotes quantum state fidelity between density matrices, written here as \(C_Q(\rho, \rho^*) = (\text{tr}\sqrt{\sqrt{\rho^*}\rho\sqrt{\rho^*}})^2\). To avoid ambiguity, we use \(F_{\text{ch}}\) for channel fidelity and \(C_Q\) for quantum state fidelity within this subsection.</li>
+  <li><strong>\(R\):</strong> resonance metric — the degree to which the control pulses (dynamical decoupling, bang-bang, or optimal control) are matched to the system Hamiltonian. High \(R\) corresponds to pulse sequences that refocus decoherence efficiently.</li>
+  <li><strong>\(\bar{u}\):</strong> mean control power or repetition rate of error-correction cycles.</li>
+  <li><strong>\(\alpha, \beta, \gamma, \delta\):</strong> phenomenological rates fitted from device characterisation data.</li>
+</ul>
+<p>The IMF ODE then reads: \(\dot{C} = -\alpha \bar{D} + \beta F_{\text{ch}} + \gamma R \bar{u} - \delta C\). The equilibrium \(C^*\) provides a figure of merit for the device's steady-state coherence under a given control protocol.</p>
+
+<div class="lane-header lane-ai">§5.2 AI Alignment Lane</div>
+<p>For an AI system, coherence operationalises the alignment between the system's deployed behaviour and its intended objectives:</p>
+<ul>
+  <li><strong>\(C(t)\):</strong> alignment coherence — a composite score measuring how closely the AI's actions conform to its value specification (e.g., a weighted average of preference-satisfaction rates across sampled tasks).</li>
+  <li><strong>\(\bar{D}\):</strong> mean distributional shift magnitude — the average Kullback–Leibler or Wasserstein distance between the training distribution and the deployment distribution over a rolling window.</li>
+  <li><strong>\(F\):</strong> channel fidelity of the training pipeline — a measure of how accurately the training signal encodes the intended objective (e.g., inter-rater agreement of RLHF labellers, or reward-model calibration score).</li>
+  <li><strong>\(R\):</strong> architectural resonance — the degree to which the model's inductive biases are aligned with the target task structure (e.g., measured by out-of-distribution generalisation benchmarks).</li>
+  <li><strong>\(\bar{u}\):</strong> mean fine-tuning or RLHF update intensity over the deployment period.</li>
+  <li><strong>\(\delta\):</strong> spontaneous alignment drift rate, capturing the tendency of the deployed model to drift from its fine-tuned state over time without active maintenance.</li>
+</ul>
+<p>Proposition 4.2 becomes an instantaneous check: given the current distributional shift \(\bar{D}\), does the RLHF signal \(F\) and architectural resonance \(R\) provide sufficient alignment maintenance? If not, the system is at the boundary and active intervention is needed.</p>
+
+<div class="lane-header lane-control">§5.3 Control-Systems Lane</div>
+<p>For a classical dynamical system under feedback control, coherence maps to tracking performance:</p>
+<ul>
+  <li><strong>\(C(t)\):</strong> closed-loop performance coherence — normalised inverse of the tracking error \(C = 1 - \|e(t)\|/e_{\max}\), where \(e(t)\) is the error between set-point and output.</li>
+  <li><strong>\(\bar{D}\):</strong> mean exogenous disturbance magnitude entering the plant.</li>
+  <li><strong>\(F\):</strong> sensor and actuator channel fidelity — the product of sensor signal-to-noise ratio and actuator bandwidth utilisation, both normalised to \([0,1]\).</li>
+  <li><strong>\(R\):</strong> controller-plant resonance — a measure of how well the controller's model matches the true plant dynamics, e.g., a normalised model-mismatch score.</li>
+  <li><strong>\(\bar{u}\):</strong> mean control authority utilised.</li>
+  <li><strong>\(\delta\):</strong> passive performance degradation rate due to wear, ageing, or environmental change.</li>
+</ul>
+<p>The equilibrium formula \(C^* = (-\alpha\bar{D} + \beta F + \gamma R\bar{u})/\delta\) implies that higher channel fidelity \(F\) produces higher equilibrium coherence \(C^*\), all else equal. This is a direct consequence of the \(\beta F\) term in Postulate 4.1, not Proposition 4.4. Specifically, a plant with higher sensor and actuator fidelity \(F\) achieves a higher steady-state coherence \(C^*\) than an otherwise identical plant with lower \(F\).</p>
+
+<div class="lane-header lane-org">§5.4 Organisational Lane</div>
+<p>For human organisations and institutions, coherence captures operational and strategic alignment:</p>
+<ul>
+  <li><strong>\(C(t)\):</strong> organisational coherence — a composite index of alignment between individual actions and collective goals, operationalised via engagement surveys, objective-key-result completion rates, or decision-quality audits.</li>
+  <li><strong>\(\bar{D}\):</strong> mean disruption intensity — average magnitude of external shocks (market shifts, regulatory changes, personnel turnover) over a rolling period.</li>
+  <li><strong>\(F\):</strong> channel fidelity of internal communication — the fidelity with which strategic intent is transmitted from leadership to operational teams, measured by message-recall studies or decision-alignment audits.</li>
+  <li><strong>\(R\):</strong> cultural resonance — the degree to which the organisation's values, processes, and incentive structures are internally consistent and mutually reinforcing.</li>
+  <li><strong>\(\bar{u}\):</strong> mean managerial intervention intensity — the normalised rate of active coordination, coaching, and correction applied by management.</li>
+  <li><strong>\(\delta\):</strong> natural entropy rate of the organisation — the rate at which coherence degrades in the absence of active management (e.g., due to informal norm drift or priority divergence).</li>
+</ul>
+<p>The IMF ODE in this lane is a phenomenological summary of the classic management insight that organisations require constant active maintenance to avoid incoherence: the \(-\delta C\) term ensures that even without disruption, coherence decays without effort. Proposition 4.6 provides the condition under which a sustained management regime can stabilise coherence above any target threshold.</p>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section">
+<p>The ExecutionProof / ProofRecord system is a lightweight formal accountability layer that maps each IMF interaction or intervention to a record entry, enabling post-hoc audit of coherence maintenance actions. The table below maps abstract IMF variables to ExecutionProof fields.</p>
+
+<table>
+  <caption data-label="Table 6.1">ExecutionProof / ProofRecord field mapping for IMF v1.2.</caption>
+  <thead>
+    <tr><th>IMF Variable</th><th>ExecutionProof Field</th><th>ProofRecord Type</th><th>Notes</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>\(C(t)\)</td><td><code>coherence_state</code></td><td>Float [0,1]</td><td>Sampled at each landmark time \(t_k\)</td></tr>
+    <tr><td>\(\bar{D}\)</td><td><code>disruption_mean</code></td><td>Float ≥ 0</td><td>Rolling window average</td></tr>
+    <tr><td>\(F\)</td><td><code>channel_fidelity</code></td><td>Float [0,1]</td><td>Renamed from <code>w_bar</code> in v1.0/v1.1 ✎</td></tr>
+    <tr><td>\(R\)</td><td><code>resonance_metric</code></td><td>Float [0,1]</td><td>Structural alignment score</td></tr>
+    <tr><td>\(\bar{u}\)</td><td><code>control_mean</code></td><td>Float [0,1]</td><td>Normalised effort over window</td></tr>
+    <tr><td>\(\alpha, \beta, \gamma, \delta\)</td><td><code>ode_params</code></td><td>Dict of Floats</td><td>Domain-fitted parameters</td></tr>
+    <tr><td>\(E_k\)</td><td><code>actual_vs_ideal_error</code></td><td>Float ≥ 0</td><td>Updated in v1.2: converges to floor \(\varepsilon/(1-L)\)</td></tr>
+    <tr><td>\(L_k\)</td><td><code>lipschitz_bound</code></td><td>Float [0,1)</td><td>Estimated from trajectory data</td></tr>
+    <tr><td>\(C_{\theta}\)</td><td><code>coherence_threshold</code></td><td>Float [0,1]</td><td>Domain-set target floor</td></tr>
+    <tr><td>\(C^*\)</td><td><code>equilibrium_coherence</code></td><td>Float</td><td>Computed from ODE params</td></tr>
+  </tbody>
+</table>
+
+<h3>6.1 Landmark-Time Protocol</h3>
+<p>A landmark time \(t_k\) is a designated checkpoint at which the ProofRecord is updated. At each \(t_k\), the following operations are logged:</p>
+<ol>
+  <li>Read current \(C(t_k)\), \(\bar{D}\), \(F\), \(R\), \(\bar{u}\) from the operational environment.</li>
+  <li>Compute the equilibrium \(C^* = (-\alpha\bar{D} + \beta F + \gamma R \bar{u})/\delta\).</li>
+  <li>Evaluate the boundary condition (Proposition 4.2): if \(C(t_k) \approx C_{\theta}\), check whether \(\beta F + \gamma R \bar{u} \geq \alpha \bar{D} + \delta C_{\theta}\).</li>
+  <li>Compute the actual-vs-ideal error \(E_k = d(\rho_{\text{actual},k}, \rho_{\text{ideal},k})\) (Definition 3.8).</li>
+  <li>Append all fields to the immutable ProofRecord ledger with a cryptographic hash linking to the preceding entry.</li>
+</ol>
+
+<h3>6.2 Audit and Verifiability</h3>
+<p>The ProofRecord chain enables third-party auditors to reconstruct the coherence trajectory from logged inputs, verify that the ODE was applied consistently with the v1.2 canonical form, and check whether the boundary condition was evaluated correctly at each landmark. This is the primary accountability mechanism of the IMF protocol. The rename of \(\bar{W} \to F\) in v1.1.1 is reflected in the <code>channel_fidelity</code> field name; systems using v1.0/v1.1 field names should migrate the <code>w_bar</code> key to <code>channel_fidelity</code> and ensure the positive-sign convention is applied.</p>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section">
+<p>Empirical hypotheses are testable predictions derived from the IMF framework. They are distinct from postulates (assumed) and propositions (derived analytically). Each hypothesis is labelled with its current epistemic status; none should be interpreted as confirmed claims absent supporting empirical studies.</p>
+
+<div class="empirical">
+  <span class="tag tag-empirical">EMPIRICAL HYPOTHESIS 7.1</span>
+  <strong>Disruption-Coherence Anti-Correlation.</strong>
+  Systems subject to higher mean disruption \(\bar{D}\) will exhibit lower equilibrium coherence \(C^*\), all other parameters equal. This follows analytically from \(C^* = (-\alpha\bar{D} + \beta F + \gamma R \bar{u})/\delta\), but the empirical claim is that the IMF parameters (\(\alpha, \delta\)) can be estimated from observational data in a given domain such that the predicted relationship is quantitatively consistent with observed coherence levels. <em>Status: untested.</em>
+</div>
+
+<div class="empirical">
+  <span class="tag tag-empirical">EMPIRICAL HYPOTHESIS 7.2</span>
+  <strong>Resonance-Amplified Recovery.</strong>
+  Systems with higher resonance metric \(R\) will recover from disruption events faster and to a higher steady state than systems with lower \(R\), when subjected to identical disruption profiles and control intensities. The IMF ODE predicts this via the \(\gamma R \bar{u}\) term; the empirical claim is that \(R\) can be operationally measured in each lane (§5) and that measured \(R\) predicts recovery trajectory shape. <em>Status: untested.</em>
+</div>
+
+<div class="empirical">
+  <span class="tag tag-empirical">EMPIRICAL HYPOTHESIS 7.3</span>
+  <strong>Channel Fidelity as a Coherence Floor Determinant.</strong>
+  In the limit of low disruption (\(\bar{D} \approx 0\)) and negligible active control (\(\bar{u} \approx 0\)), the equilibrium coherence approaches \(C^* \approx \beta F / \delta\), making channel fidelity the dominant driver of the coherence floor. Empirically, this predicts that systems with higher channel fidelity will exhibit higher baseline coherence in quiescent (low-disruption, low-control) conditions. <em>Status: untested.</em>
+</div>
+
+<div class="empirical">
+  <span class="tag tag-empirical">EMPIRICAL HYPOTHESIS 7.4</span>
+  <strong>Early Warning via Drift Rate Monitoring.</strong>
+  The finite warning time bound of Proposition 4.5 can be operationalised: real-time monitoring of the coherence drift rate \(v(t) = -\dot{C}(t)\), coupled with a lower-bound estimate \(\hat{v}_{\min}\), provides actionable advance warning of threshold crossings. Systems instrumented with such monitoring will detect impending coherence failures earlier and respond more effectively than systems relying on threshold-crossing detection alone. <em>Status: untested.</em>
+</div>
+
+<div class="empirical">
+  <span class="tag tag-empirical">EMPIRICAL HYPOTHESIS 7.5</span>
+  <strong>Stable Error Floor.</strong>
+  <span class="correction-note">Updated in v1.2 to reflect Proposition 4.3's corrected recurrence. Prior versions predicted monotone decrease to zero; the correct prediction is convergence to a stable positive floor.</span>
+  Under well-controlled inheritance deployments with bounded perturbations \(\varepsilon_k\) and contractivity \(L_k &lt; 1\), the actual-vs-ideal state-at-landmark error \(E_k\) should converge toward a stable floor \(E_\infty \approx \varepsilon/(1-L)\) rather than monotonically decrease to zero. This floor provides a testable precision bound: estimated \(L_k\) and \(\varepsilon_k\) values from observed data should predict \(E_\infty\) within measurement uncertainty. Deployments that fail to achieve bounded error accumulation falsify the proposition's assumptions, suggesting either \(L_k \geq 1\) or unbounded perturbations. <em>Epistemic tag: Empirical Hypothesis — requires experimental validation.</em>
+</div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section">
+<p>This section presents six simulations illustrating key properties of the IMF framework. The figures are <em>not</em> all based on the same mathematical object: each figure's underlying computation is described individually below. None constitutes empirical validation of the framework against real-world data.</p>
+
+<p><strong>Mathematical basis per figure:</strong> Figures 1, 3, and 4 integrate the canonical ODE (Postulate 4.1) using Euler numerical methods (see §8.1 for convergence analysis). Figure 2 illustrates Proposition 4.3's discrete error recurrence \(E_{k+1} = L \cdot E_k + \varepsilon_k\) independently of the ODE &mdash; it is a discrete-time sequence, not an ODE trajectory. Figure 5 presents a qualitative design mapping using categorical labels (Primary, Secondary, Indirect, None) reflecting alignment design intent &mdash; no numerical computation is involved. Figure 6 tests the early-warning architecture under an explicitly imposed auxiliary model \(C = 1 - \bar{D}^{1.5} + \text{noise}\) with a radial coherence&ndash;drift coupling &mdash; this is <em>not</em> Postulate 4.1 but an auxiliary construction used to verify the landmark-time AUC methodology.</p>
+
+<h3>8.1 Numerical Methods and Solver Convergence</h3>
+<p>All figures were generated using forward Euler integration with step size \(\Delta t = 0.05\). Prior to public release, the simulation suite was subjected to a step-size convergence check comparing three Euler step sizes (\(\Delta t = 0.1\), \(0.05\), \(0.01\)) against a high-accuracy reference solver (scipy <code>solve_ivp</code>, RK45 method, relative tolerance \(10^{-9}\), absolute tolerance \(10^{-12}\)).</p>
+
+<p><strong>Solver Convergence Check.</strong> A standalone verification script (<code>solver_convergence_check.py</code>) compares Euler integration at \(\Delta t \in \{0.10, 0.05, 0.01\}\) against a scipy RK45 reference (rtol=\(10^{-8}\), atol=\(10^{-10}\)) for the resonance-matched scenario. Results are saved to <code>solver_convergence_results.csv</code>. This script is included in the release package and can be run independently to reproduce the convergence diagnostics. Maximum absolute deviations and threshold-crossing time differences are recorded there; they are not reproduced inline in this document to avoid reporting figures that could become stale if parameters change.</p>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK</span>
+  <strong>Simulation Scope.</strong> These numerical experiments illustrate the conceptual correspondence between the IMF ODE's analytical predictions (§4) and its simulated trajectories. They are not evidence for or against any empirical hypothesis in §7. The parameters used are chosen for illustrative clarity and do not represent any particular real-world system.
+</div>
+
+<h3>8.2 Figure Descriptions</h3>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig1_coherence_dynamics.png" alt="Figure 1: Baseline coherence trajectories under different disruption levels" style="max-width:100%;max-height:38vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 1">Figure 1 displays three canonical scenarios under the projected discrete implementation of Postulate 4.1. The <strong>Unmanaged</strong> scenario applies growing disruption \(\bar{D}(t)\) with no stewardship (\(R=0\), \(\bar{u}=0\)), driving the system toward \(C=0\) (negative raw forcing clipped at the boundary). The <strong>Delayed Stewardship</strong> scenario begins with elevated disruption; stewardship intervention (\(R&gt;0\), \(\bar{u}&gt;0\)) begins at \(t=15\), producing a visible inflection and partial recovery. The <strong>Resonance-Matched</strong> scenario applies resonance-aligned stewardship from \(t=0\), achieving convergence toward the highest stable equilibrium. All three scenarios share the same structural equation; the difference is entirely in the driver trajectories.</figcaption>
+</figure>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig2_drift_accumulation.png" alt="Figure 2: Actual-vs-ideal error contraction" style="max-width:100%;max-height:44vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 2">Bounded error accumulation (discrete recurrence, Proposition 4.3). <em>This figure is independent of the ODE and uses only the recurrence \(E_{k+1} = L_{k+1} \cdot E_k + \varepsilon_{k+1}\).</em> Three contractivity regimes are shown: Near-unity contractivity (\(L=0.95\), \(\varepsilon=0.03\), \(E_\infty=0.60\)); Moderate contractivity (\(L=0.80\), \(\varepsilon=0.08\), \(E_\infty=0.40\)); Strong contractivity (\(L=0.60\), \(\varepsilon=0.15\), \(E_\infty=0.375\)). The error sequence converges toward the stable floor \(E_\infty = \varepsilon/(1-L)\), consistent with the corrected Proposition 4.3. <em>Note: the near-unity contractivity regime has the highest error floor because \(L\approx 1\) retains prior error strongly. Strong contractivity (\(L=0.60\)) achieves a lower floor under the given perturbation magnitudes, illustrating that the stable floor depends on both \(L\) and \(\varepsilon\) jointly.</em></figcaption>
+</figure>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig3_resonance_correction.png" alt="Figure 3: Phase portrait and equilibrium" style="max-width:100%;max-height:38vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 3">Phase portrait of the IMF ODE (Postulate 4.1, Euler integration). Direction field \(\dot{C}\) as a function of \(C\) for three parameter combinations with \(F = 0.60\) held constant. The globally attracting equilibrium \(C^*\) is marked for each case. The linear phase portrait is consistent with the analytical solution and Proposition 4.6's invariance condition.</figcaption>
+</figure>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig4_lane_comparison.png" alt="Figure 4: Resonance advantage — parameter sweep" style="max-width:100%;max-height:42vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 4">Resonance and fidelity sweep (Postulate 4.1 ODE, Euler integration). Coherence as a function of resonance \(R \in [0,1]\) for three fidelity levels \(F \in \{0.3, 0.6, 0.9\}\). Higher \(R\) (Proposition 4.4) and higher \(F\) (\(\beta F\) term) both raise coherence additively. Trajectory endpoints are annotated with the final simulated coherence value \(C(60)\), the actual system state at the end of the simulation horizon.</figcaption>
+</figure>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig5_executionproof_mapping.png" alt="Figure 5: Channel fidelity F sweep (renamed from W̄)" style="max-width:100%;max-height:40vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 5">Qualitative design mapping (categorical labels — no numerical computation). Labels (Primary, Secondary, Indirect, None) are conceptual alignment categories reflecting design intent — not empirically measured scores or numerical values. Colors indicate alignment depth. This figure illustrates the conceptual correspondence between the four lanes and the IMF variables; it does not constitute a quantitative result.</figcaption>
+</figure>
+
+<figure style="page-break-inside:avoid;">
+  <img src="/home/ubuntu/imf_sims/imf_fig6_early_warning.png" alt="Figure 6: Landmark-time AUC and warning time" style="max-width:100%;max-height:44vh;height:auto;object-fit:contain;">
+  <figcaption data-label="Figure 6">Figure 6 tests the early-warning architecture of the IMF under an explicitly imposed radial coupling \(C = 1 - \bar{D}^{1.5} + \text{noise}\) &mdash; this is NOT Postulate 4.1 but an auxiliary model used to verify the landmark-time AUC methodology. The figure contains three panels: (top) mean coherence trajectories across 200 stochastic trials, separated by collapse outcome; (middle) mean drift \(\bar{D}\) trajectories showing the divergence between collapsed and non-collapsed groups that provides the early-warning signal; (bottom) AUC bars across five prediction horizons \(\tau\), confirming that drift elevation precedes coherence collapse in this model. The threshold is \(C_{\min} = 0.25\). Post-collapse time points are excluded from the landmark-time labeling. The near-perfect AUC reflects the construction of the model &mdash; \(C\) is built directly from \(\bar{D}\) &mdash; and is expected. This figure is an internal model-recovery test, not evidence of predictive validity in real systems.</figcaption>
+</figure>
+</div>
+
+<!-- ===== SECTION 9 ===== -->
+<div class="section">
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.1</span>
+  <strong>Simulation correctness.</strong> The six figures in §8 were generated from a rebuilt simulation suite. As noted in §8, each figure is based on a distinct mathematical object (ODE, discrete recurrence, categorical mapping, or auxiliary model) &mdash; not all integrate Postulate 4.1. The Euler convergence check (§8.1) confirms that the ODE-based figures (1, 3, 4) are consistent with a high-accuracy reference solver. Figure 5 uses categorical labels with no numerical computation; Figure 6 uses an auxiliary model explicitly identified as such.
+</div>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.2</span>
+  <strong>Mathematical status of propositions.</strong> Propositions 4.2–4.6 are mathematical consequences of Postulate 4.1 under the stated assumptions (§2). They are valid within the model precisely to the extent that the model's assumptions hold. No proposition constitutes an empirical claim; the empirical hypotheses in §7 are the falsifiable predictions.
+</div>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.3</span>
+  <strong>Scope of "illustrated."</strong> Throughout this document, simulations are described as <em>illustrating</em> model properties, not validating or confirming them. The distinction matters: an illustration shows that the model predicts a given qualitative pattern; validation would require comparison against independent empirical data with adequate sample sizes, blinding, and statistical analysis. No such validation has been performed.
+</div>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.4</span>
+  <strong>Conceptual correspondence, not empirical fit.</strong> The lane instantiations in §5 establish <em>conceptual correspondence</em> between IMF variables and domain-specific measurables. They do not constitute empirical fits to data; the parameter values used in §8 are illustrative and were not estimated from real-world observations.
+</div>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.5</span>
+  <strong>Claims removed in v1.1.1.</strong> The claim in v1.0 that the IMF framework had been "validated" against empirical data has been removed. The claim in v1.1 that a frequency-domain property held has been removed pending derivation. These removals are documented in the Change Log and represent epistemic corrections, not retractions of correct claims.
+</div>
+
+<div class="remark">
+  <span class="tag tag-remark">REMARK 9.6</span>
+  <strong>Formal status.</strong> The IMF framework as presented here is a candidate phenomenological model. Its mathematical propositions are formal results within the stated axiomatic structure. Its empirical hypotheses are conjectural. The framework has not been peer-reviewed, has not been subjected to pre-registered empirical testing, and should not be cited as established science. Remnant Fieldworks Inc. intends the framework as a conceptual tool for structured thinking about coherence maintenance, not as a validated predictive model for engineering design or safety-critical applications.
+</div>
+</div>
+
+<!-- ===== SECTIONS 10+11+REFS ===== -->
+<div class="section">
+<h2 id="sec-rfinc">10. Remnant Fieldworks Inc.</h2>
+<p>Remnant Fieldworks Inc. is a research and development organisation based in Westerville, Ohio, focused on the development of formal frameworks for coherence maintenance in complex systems. The Inheritance Math Framework (IMF) is one of several research outputs under active development. The v1.2.1 patch release reflects Remnant Fieldworks' commitment to epistemic transparency: errors in prior releases are corrected explicitly, the scope of claims is narrowed to what the mathematics supports, and simulation code is made consistent with the published model. The formal structure has undergone four correction passes and is presented for further consistency review. As documented in the version history, each pass has identified and corrected genuine structural issues. The IMF Python simulation library has been updated to v1.2.1, aligning the ODE implementation with the canonical form in Postulate 4.1 and implementing the projected discrete system \(\Pi_{[0,1]}[C_n + \Delta t\cdot f(C_n)]\) for domain enforcement. Users of prior library versions should upgrade and re-run any analyses that depend on the retired <code>w_bar</code> variable or the adaptive-capacity state variable.</p>
+<p>Inquiries regarding the IMF framework, collaboration opportunities, or commercial licensing may be directed to Remnant Fieldworks Inc., Westerville, Ohio.</p>
+
+<h2 id="sec-conclusion">11. Conclusion</h2>
+<p>This document presents version 1.2.1 of the Inheritance Math Framework (IMF), the Release Integrity Reconciliation patch. The v1.2 contributions are listed in the version history. The additional contributions of v1.2.1 are:</p>
+<ol>
+  <li><strong>Proposition 4.3 proof operator order corrected.</strong> Prior v1.2 had the actual transition as \(J_{k+1}(N_{k+1}(\rho))\) (perturbation before channel), which by contractivity of \(J\) gives \(L_{k+1}(E_k + \varepsilon_{k+1})\) &mdash; mismatching the stated bound. The corrected form uses \(N_{k+1}(J_{k+1}(\rho))\) (perturbation after channel), and the triangle inequality directly yields \(\varepsilon_{k+1} + L_{k+1}\cdot E_k\). The stated recurrence and closed-form bound are unchanged; only the proof derivation is corrected.</li>
+  <li><strong>Postulate 4.1 remark updated to projected-model description.</strong> The v1.2 parameter-domain condition remark claimed scenarios satisfy \(0 \leq -\alpha\bar{D}+\beta F+\gamma R\bar{u}\leq\delta\). This is replaced by an accurate description of the companion simulations as a projected discrete system \(\Pi_{[0,1]}[C_n + \Delta t\cdot f(C_n)]\), where a negative raw equilibrium represents lower-boundary pressure under the Unmanaged scenario.</li>
+  <li><strong>State-at-landmark vs. trajectory error distinguished.</strong> Definition 3.8 defines trajectory-space error; Proposition 4.3 bounds state-at-landmark error. A new note makes this distinction explicit. Whole-trajectory error bounds are deferred to future work.</li>
+  <li><strong>Figure 1 description corrected.</strong> Was: constant disruption levels with fixed stewardship. Now: growing disruption (Unmanaged), delayed stewardship onset at \(t=15\) (Delayed Stewardship), and resonance-matched stewardship from \(t=0\) (Resonance-Matched).</li>
+  <li><strong>Figure 6 description corrected.</strong> Was: running warning-time estimate panel, threshold \(C_\theta=0.5\). Now: three panels (mean coherence, mean drift, AUC bars across five horizons), threshold \(C_{\min}=0.25\), post-collapse exclusion from landmark labeling.</li>
+  <li><strong>Convergence table removed.</strong> The inline numerical convergence table (Table 8.1) is replaced by a reference to the standalone <code>solver_convergence_check.py</code> script and <code>solver_convergence_results.csv</code> output file.</li>
+  <li><strong>Figure 2 regime labels updated.</strong> "High/Medium/Low Fidelity" replaced by "Near-unity contractivity (\(L=0.95\), \(E_\infty=0.60\))", "Moderate contractivity (\(L=0.80\), \(E_\infty=0.40\))", and "Strong contractivity (\(L=0.60\), \(E_\infty=0.375\))". A note is added clarifying that the stable floor depends jointly on \(L\) and \(\varepsilon\).</li>
+  <li><strong>Figure 4 endpoint annotations corrected.</strong> Description now states that trajectory endpoints are annotated with the final simulated coherence value \(C(60)\), not the initial equilibrium formula \(C^*(0)\).</li>
+</ol>
+<p>The Inheritance Math Framework (IMF) remains a Phase 1 candidate phenomenological model. Its mathematical propositions are formal results within the stated axiomatic structure and have been subject to four correction passes; the formal structure is presented for further consistency review. Its empirical hypotheses await testing. The framework is offered as a conceptual tool for structured reasoning about coherence maintenance across diverse domains, with the explicit acknowledgment that empirical validation is a necessary next step before any engineering or safety-critical application.</p>
+
+<h2 id="sec-references">References</h2>
+<p class="references">The framework is self-contained in its derivations. Its terminology and adjacent mathematical concepts draw on the following established literature, which is cited for context and further reading rather than as foundational dependencies. Readers seeking formal derivations of the underlying mathematical structures are referred to these works.</p>
+<p class="references">Strogatz, S.H. (2018). <em>Nonlinear Dynamics and Chaos</em>, 2nd ed. CRC Press.</p>
+<p class="references">Nielsen, M.A. and Chuang, I.L. (2000). <em>Quantum Computation and Quantum Information</em>. Cambridge University Press.</p>
+<p class="references">Åström, K.J. and Murray, R.M. (2008). <em>Feedback Systems: An Introduction for Scientists and Engineers</em>. Princeton University Press.</p>
+</div>
+
+<!-- TOC PAGE NUMBER RESOLVER -->
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+  var obs=new MutationObserver(function(m,o){
+    var p=document.querySelector('.pagedjs_pages');
+    if(p){o.disconnect();setTimeout(resolvePageNumbers,500);}
+  });
+  obs.observe(document.body,{childList:true,subtree:true});
+  function resolvePageNumbers(){
+    document.querySelectorAll('.page-ref').forEach(function(ref){
+      var href=ref.getAttribute('data-href');
+      var target=document.getElementById(href.replace('#',''));
+      if(target){
+        var page=target.closest('.pagedjs_page');
+        if(page) ref.textContent=page.getAttribute('data-page-number')||'?';
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>

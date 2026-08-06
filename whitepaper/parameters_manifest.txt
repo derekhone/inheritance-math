@@ -1,0 +1,104 @@
+IMF Simulation Suite v1.2.1 -- Parameters Manifest
+Remnant Fieldworks Inc. | seed=42
+Canonical ODE: dC/dt = -alpha*D_bar + beta*F + gamma*R*u_bar - delta*C
+
+======================================================================
+
+FIGURE 1: Core Balance Law: Three Scenarios
+======================================================================
+  ODE: dC/dt = -alpha*D_bar + beta*F + gamma*R*u_bar - delta*C
+  dt: 0.05
+  T: 60
+  C(0): 0.65
+  C_min: 0.2
+  alpha: 0.1
+  beta: 0.08
+  gamma: 0.11
+  delta: 0.12
+  A_Unmanaged: F=0.15, R=0.0, u=0.0, D_bar=0.1+0.012t
+  B_Delayed: Pre-t=15: same as A; Post: F=0.55, R=0.55, u=0.6, D decays from switch value at -0.005/t
+  C_Resonance: D_bar=0.25, F=0.7, R=0.85, u=0.75, C*=0.843
+
+======================================================================
+
+FIGURE 2: Actual-vs-Ideal State-at-Landmark Error (Proposition 4.3)
+======================================================================
+  Recurrence: E_{k+1} = L * E_k + eps (includes eps term)
+  Bound: E_K = E_0 * L^K + eps * (1 - L^K) / (1 - L)
+  K: 10
+  E_0: 0.1
+  Near-unity_contractivity: L=0.95, eps=0.03, E_inf=0.60
+  Moderate_contractivity: L=0.80, eps=0.08, E_inf=0.40
+  Strong_contractivity: L=0.60, eps=0.15, E_inf=0.37
+
+======================================================================
+
+FIGURE 3: Recovery Under Resonance Alignment (F Constant)
+======================================================================
+  ODE: dC/dt = -alpha*D_bar + beta*F + gamma*R*u_bar - delta*C
+  F_CONSTANT: 0.6
+  u_bar: 0.65
+  alpha: 0.1
+  beta: 0.08
+  gamma: 0.11
+  delta: 0.12
+  C(0): 0.75
+  T_disrupt: 5
+  C_recovery: 0.65
+  D_bar(t): 0.15 + 0.55*exp(-0.04*(t-5)) for t>=5, else 0.15
+  Resonance_R: 0.9
+  Generic_R: 0.35
+  Misaligned_R: 0.1
+  Recovery_times: {'Resonance-Matched': '7.1', 'Generic': 'None', 'Misaligned': 'None'}
+
+======================================================================
+
+FIGURE 4: Qualitative Coherence Across Four IMF Lanes
+======================================================================
+  ODE: dC/dt = -alpha*D_bar + beta*F + gamma*R*u_bar - delta*C
+  alpha_common: 0.1
+  beta_common: 0.08
+  gamma_common: 0.11
+  dt: 0.05
+  T: 60
+  C(0): 0.5
+  Quantum Information_Cstar: 0.530 -> 0.410
+  Software Systems_Cstar: 0.711 -> 0.611
+  Enterprise Governance_Cstar: 0.679 -> 0.619
+  Ecological Inheritance_Cstar: 0.569 -> 0.344
+  Quantum Information: delta=0.2, D0=0.08, F=0.8, R=0.7, u=0.65, D_growth=0.004, sigma=0.0
+  Software Systems: delta=0.12, D0=0.1, F=0.68, R=0.62, u=0.6, D_growth=0.002, sigma=0.0
+  Enterprise Governance: delta=0.1, D0=0.1, F=0.58, R=0.55, u=0.52, D_growth=0.001, sigma=0.0
+  Ecological Inheritance: delta=0.08, D0=0.1, F=0.35, R=0.5, u=0.5, D_growth=0.003, sigma=0.012
+
+======================================================================
+
+FIGURE 5: ExecutionProof Engine Alignment Matrix (Categorical)
+======================================================================
+  IMF_rows: ['Drift bar{D}', 'Fidelity F', 'Resonance R', 'Stewardship bar{u}', 'Coherence C', 'Error Floor E_infty']
+  Engines: ['Authority', 'Evidence', 'Constraint', 'Control/Record', 'Coherence Envelope']
+  Levels: 0=None, 1=Indirect, 2=Secondary, 3=Primary
+  Format: Categorical labels only -- NO decimal scores
+
+======================================================================
+
+FIGURE 6: Drift as Early Warning (Landmark AUC)
+======================================================================
+  Coupling: C(t) = clip(1 - D_bar^1.5 + sigma_C*noise, 0, 1)
+  NOT_Postulate_4.1: This figure uses explicit radial coupling
+  D_dynamics: dD/dt = lambda(t) + sigma_D * xi
+  lambda(t): 0.005 + 0.003 * max(0, t-40)/60
+  dt: 0.1
+  T: 120
+  N_trials: 200
+  seed: 42
+  C_min: 0.25
+  consec_steps: 3
+  sigma_D: 0.02
+  sigma_C: 0.03
+  D_bar(0): 0.1
+  tau_values: [5, 10, 15, 20, 25]
+  AUC_values: ['0.990', '0.984', '0.979', '0.973', '0.966']
+  AUC_method: landmark-time labels (collapse within next tau, post-collapse excluded)
+  collapsed: 114/200
+  mean_collapse: 100.8 +/- 13.5
