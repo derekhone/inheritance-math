@@ -1,3 +1,9 @@
+> **Repository Role:** Research Library (Alpha) — Inheritance Math Framework (IMF) Python Library + Whitepaper · Part of the [Remnant Fieldworks](https://remnantfieldworks.com) research and product ecosystem
+
+**Where this fits:** This repository is part of the Coherent Inheritance Framework (CIF) open-science program at Remnant Fieldworks. CIF investigates coherence dynamics across inheritance boundaries using preregistered, evidence-constrained methodology. This repository provides the Inheritance Math Framework (IMF) Python library and whitepaper for modeling what survives when knowledge, authority, and meaning cross a system boundary. For the commercial product, see [ExecutionProof](https://executionproof.io).
+
+---
+
 # inheritance-math
 
 **Coherent Inheritance Framework (CIF)** — a small, dependency-light Python
