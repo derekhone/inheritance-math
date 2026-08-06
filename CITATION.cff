@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this framework, please cite it as below."
+type: software
+authors:
+  - family-names: Hone
+    given-names: Derek
+    name-suffix: A.
+    affiliation: Remnant Fieldworks Inc.
+    city: Westerville
+    region: OH
+    country: US
+title: "Inheritance Math Framework (IMF): A Phase 1 Candidate Mathematical Framework for Coherence Dynamics Across Inheritance Boundaries"
+version: "1.2.1"
+date-released: "2026-08-05"
+license: CC-BY-4.0
+repository-code: "https://github.com/derekhone/inheritance-math"
+abstract: >
+  A candidate phenomenological framework modeling coherence dynamics across
+  inheritance boundaries. Provides a canonical ODE (dC/dt = −α·D̄ + β·F + γ·R·ū − δ·C),
+  formal propositions for trajectory error accumulation and early-warning detection,
+  and four lane instantiations (quantum information, software systems, ecological
+  inheritance, enterprise governance). Includes an ExecutionProof engine mapping.
+  Phase 1 open review — not peer-reviewed science.
+keywords:
+  - coherence
+  - inheritance
+  - dynamical systems
+  - knowledge transmission
+  - candidate framework
+  - phase 1
+  - open review

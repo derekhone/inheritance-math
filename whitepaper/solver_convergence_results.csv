@@ -1,0 +1,5 @@
+Solver,dt,MaxAbsDev,ThresholdCrossingTime,ThresholdCrossingDiff
+Euler,0.1,0.000428,6.10,+0.0020
+Euler,0.05,0.000213,6.10,+0.0020
+Euler,0.01,0.000043,6.10,+0.0020
+RK45 (ref),--,0.000000,6.10,(reference)
