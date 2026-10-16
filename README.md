@@ -182,4 +182,4 @@ pytest
 
 ## License
 
-MIT © 2026 Remnant Fieldworks Inc.
+Code: MIT © 2026 Remnant Fieldworks Inc. (see [LICENSE-code](LICENSE-code)), as already stated by the package metadata. Documents/whitepaper: CC BY 4.0 (see [LICENSE](LICENSE)). Existing CC BY grants are not revoked or narrowed by this clarification. The earlier root license and software citation metadata also stated CC BY; where their coverage of code is material, obtain owner/counsel clarification rather than assuming an exclusive license. See [LICENSE-SCOPE.md](LICENSE-SCOPE.md).
